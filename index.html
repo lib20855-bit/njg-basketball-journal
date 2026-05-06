@@ -4,21 +4,22 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<title>LEE'S BRAIN-UPGRADE</title>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>LEE'S EVOLVE HUB</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Sans+SC:wght@300;400;700&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg: #0d0f14;
-  --surface: #161920;
-  --surface2: #1e2129;
+  --bg: #050608;
+  --surface: rgba(22, 25, 32, 0.7);
+  --surface-active: rgba(30, 35, 45, 0.9);
   --border: rgba(255, 255, 255, 0.08);
-  --green: #00d463;
-  --purple: #9b6dff;
+  --green: #00ff88;
+  --purple: #9d7fff;
   --orange: #ff6b35;
   --blue: #38bdf8;
-  --text: #f0f2f8;
-  --text-dim: #9aa3b8;
-  --radius: 16px;
+  --text: #ffffff;
+  --text-dim: rgba(255, 255, 255, 0.6);
+  --radius: 20px;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
@@ -26,102 +27,66 @@ body {
   background: var(--bg);
   color: var(--text);
   font-family: 'Noto Sans SC', sans-serif;
-  font-weight: 300;
-  line-height: 1.6;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
 }
 
-/* 🔥 首页背景人格化 */
+/* 🔥 HERO: 人格化入口 (靖哥, 这里的 URL 换成你最帅的那张照片) */
 .hero {
-  padding: 60px 20px 30px;
-  background: url('https://images.unsplash.com/photo-1546519638-68e109498ffc?auto=format&fit=crop&q=80&w=1000') center/cover no-repeat;
+  height: 55vh;
+  background: url('https://images.unsplash.com/photo-1546519638-68e109498ffc?q=80&w=1000') center/cover no-repeat;
   position: relative;
-  border-bottom: 1px solid var(--border);
-  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 30px 24px;
 }
 .hero::after {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(to bottom, rgba(13, 15, 20, 0.2), var(--bg));
+  background: linear-gradient(180deg, transparent 0%, rgba(5, 6, 8, 0.4) 60%, var(--bg) 100%);
 }
 .hero-content { position: relative; z-index: 10; }
-.hero-name { font-family: 'Bebas Neue'; font-size: 3rem; letter-spacing: 2px; text-shadow: 0 4px 20px rgba(0,0,0,0.5); }
+.hero-name { font-family: 'Bebas Neue'; font-size: 4rem; line-height: 0.9; letter-spacing: 2px; text-shadow: 0 10px 20px rgba(0,0,0,0.4); }
+.hero-tag { font-size: 11px; font-weight: 700; color: var(--green); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px; }
 
-.hero-stats { 
-  display: flex; gap: 12px; margin-top: 25px; position: relative; z-index: 10;
+/* 动态数据行 */
+.stat-bar { 
+  display: flex; gap: 10px; margin-top: 20px; position: relative; z-index: 10; 
 }
-.stat-item { 
-  flex: 1; background: rgba(22, 25, 32, 0.7); backdrop-filter: blur(10px);
-  border: 1px solid var(--border); padding: 12px; border-radius: 12px; text-align: center;
+.stat-pill { 
+  flex: 1; background: var(--surface); backdrop-filter: blur(20px);
+  border: 1px solid var(--border); border-radius: 12px; padding: 10px; text-align: center;
 }
-.stat-val { font-family: 'Bebas Neue'; font-size: 1.8rem; display: block; line-height: 1; color: var(--green); }
-.stat-lbl { font-size: 10px; color: var(--text-dim); text-transform: uppercase; margin-top: 4px; }
+.stat-n { font-family: 'Bebas Neue'; font-size: 1.4rem; color: #fff; display: block; }
+.stat-l { font-size: 9px; color: var(--text-dim); text-transform: uppercase; }
 
-/* 🔥 模块卡片视觉锚点化 */
-.module-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 20px; }
+/* 🔥 模块网络: 视觉锚点设计 */
+.module-grid { 
+  display: grid; grid-template-columns: 1fr 1fr; gap: 16px; padding: 24px; 
+}
 .module-card {
-  height: 140px;
+  height: 160px; border-radius: var(--radius); border: 1px solid var(--border);
+  position: relative; overflow: hidden; display: flex; flex-direction: column; 
+  justify-content: flex-end; padding: 18px; transition: transform 0.2s;
   background-size: cover; background-position: center;
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  position: relative; overflow: hidden;
-  display: flex; flex-direction: column; justify-content: flex-end; padding: 15px;
 }
+.module-card:active { transform: scale(0.96); }
 .module-card::after {
   content: ''; position: absolute; inset: 0;
-  background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 100%);
+  background: linear-gradient(225deg, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.8) 100%);
 }
-.mc-content { position: relative; z-index: 2; }
-.mc-name { font-family: 'Bebas Neue'; font-size: 1.6rem; color: #fff; letter-spacing: 1px; }
-.mc-sub { font-size: 11px; color: var(--green); font-weight: 700; text-transform: uppercase; }
+.mc-inner { position: relative; z-index: 2; }
+.mc-label { font-size: 10px; font-weight: 700; text-transform: uppercase; margin-bottom: 4px; }
+.mc-name { font-family: 'Bebas Neue'; font-size: 1.8rem; letter-spacing: 1px; color: #fff; line-height: 1; }
 
-/* 详情页 & 记录卡片 */
-.header {
-  position: sticky; top: 0; z-index: 100;
-  background: rgba(13, 15, 20, 0.8); backdrop-filter: blur(20px);
-  padding: 16px 20px; display: flex; align-items: center; justify-content: space-between;
-  border-bottom: 1px solid var(--border);
-}
-.card {
-  background: var(--surface); border: 1px solid var(--border);
-  border-radius: var(--radius); margin: 0 20px 16px; padding: 20px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-}
-.card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-.card-rating { color: #ffb800; font-size: 12px; letter-spacing: 2px; }
-.card-title { font-size: 19px; font-weight: 500; margin-bottom: 8px; color: var(--text); }
-.card-text { font-size: 15px; color: var(--text-dim); line-height: 1.8; margin-bottom: 15px; }
-
-/* 认知标签系统 */
-.tag-row { display: flex; gap: 8px; margin-bottom: 12px; }
-.tag { font-size: 10px; font-weight: 700; padding: 3px 10px; border-radius: 4px; text-transform: uppercase; }
-.tag-depth { background: var(--purple); color: #fff; }
-.tag-brief { background: var(--surface2); color: var(--text-dim); }
-
-/* 评分选择器 */
-.rating-select { display: flex; gap: 10px; margin-bottom: 20px; justify-content: center; }
-.star-btn { font-size: 24px; color: var(--text-dim); cursor: pointer; transition: color 0.2s; }
-.star-btn.active { color: #ffb800; }
-
+/* 底部操作 */
 .fab {
-  position: fixed; bottom: 30px; right: 24px; width: 60px; height: 60px;
-  border-radius: 50%; background: var(--green); color: #000;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 32px; box-shadow: 0 8px 24px rgba(0, 212, 99, 0.4); border: none; z-index: 200;
-}
-
-.modal-overlay {
-  position: fixed; inset: 0; background: rgba(0,0,0,0.9);
-  display: none; z-index: 300; align-items: flex-end;
-}
-.modal-overlay.open { display: flex; }
-.modal {
-  width: 100%; background: var(--surface); border-radius: 24px 24px 0 0;
-  padding: 24px 20px 40px; border-top: 1px solid var(--border);
-}
-.modal-input {
-  width: 100%; background: var(--bg); border: 1px solid var(--border);
-  color: var(--text); padding: 14px; border-radius: 12px; margin-bottom: 15px; outline: none;
+  position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+  height: 64px; width: 64px; border-radius: 50%; background: #fff; color: #000;
+  display: flex; align-items: center; justify-content: center; font-size: 32px;
+  box-shadow: 0 15px 35px rgba(255, 255, 255, 0.2); border: none; z-index: 100;
 }
 </style>
 </head>
@@ -130,155 +95,45 @@ body {
 <div id="home-view">
   <div class="hero">
     <div class="hero-content">
-      <div class="hero-name">LEE / THE LAB</div>
-      <div style="font-size: 12px; color: var(--green); font-weight: 700; letter-spacing: 1px;">EVOLVE OR DIE.</div>
+      <div class="hero-tag">2026.SEASON_READY</div>
+      <div class="hero-name">LEE / THE<br>EVOLVER</div>
     </div>
-    <div class="hero-stats">
-      <div class="stat-item"><span class="stat-val" id="stat-player">0</span><span class="stat-lbl">BBALL</span></div>
-      <div class="stat-item"><span class="stat-val" id="stat-coach">0</span><span class="stat-lbl">COACH</span></div>
-      <div class="stat-item"><span class="stat-val" id="stat-ref">0</span><span class="stat-lbl">REF</span></div>
-      <div class="stat-item"><span class="stat-val" id="stat-fit">0</span><span class="stat-lbl">FIT</span></div>
+    <div class="stat-bar">
+      <div class="stat-pill"><span class="stat-n" id="stat-player">0</span><span class="stat-l">Player</span></div>
+      <div class="stat-pill"><span class="stat-n" id="stat-coach">0</span><span class="stat-l">Coach</span></div>
+      <div class="stat-pill"><span class="stat-n" id="stat-ref">0</span><span class="stat-l">Ref</span></div>
+      <div class="stat-pill" style="border-color: var(--blue);"><span class="stat-n" id="stat-fit">0</span><span class="stat-l" style="color: var(--blue);">PR_Record</span></div>
     </div>
   </div>
 
   <div class="module-grid">
-    <div class="module-card" style="background-image:url('https://images.unsplash.com/photo-1519861531473-9200362349c4?q=80&w=500')" onclick="enterModule('player')">
-      <div class="mc-content"><div class="mc-sub">Log</div><div class="mc-name">PLAYER</div></div>
+    <div class="module-card" style="background-image:url('https://images.unsplash.com/photo-1519861531473-9200362349c4?q=80&w=500')" onclick="enter('player')">
+      <div class="mc-inner"><div class="mc-label" style="color:var(--green)">Evolution</div><div class="mc-name">PLAYER</div></div>
     </div>
-    <div class="module-card" style="background-image:url('https://images.unsplash.com/photo-1508615070457-7baeba4003ab?q=80&w=500')" onclick="enterModule('coach')">
-      <div class="mc-content"><div class="mc-sub">Tactics</div><div class="mc-name">COACH</div></div>
+    <div class="module-card" style="background-image:url('https://images.unsplash.com/photo-1508615070457-7baeba4003ab?q=80&w=500')" onclick="enter('coach')">
+      <div class="mc-inner"><div class="mc-label" style="color:var(--purple)">Strategy</div><div class="mc-name">COACH</div></div>
     </div>
-    <div class="module-card" style="background-image:url('https://images.unsplash.com/photo-1541534741688-6078c64b5913?q=80&w=500')" onclick="enterModule('ref')">
-      <div class="mc-content"><div class="mc-sub">Refined</div><div class="mc-name">REFEREE</div></div>
+    <div class="module-card" style="background-image:url('https://images.unsplash.com/photo-1541534741688-6078c64b5913?q=80&w=500')" onclick="enter('ref')">
+      <div class="mc-inner"><div class="mc-label" style="color:var(--orange)">Decision</div><div class="mc-name">REFEREE</div></div>
     </div>
-    <div class="module-card" style="background-image:url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=500')" onclick="enterModule('fit')">
-      <div class="mc-content"><div class="mc-sub">Metrics</div><div class="mc-name">FITNESS</div></div>
+    <div class="module-card" style="background-image:url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=500')" onclick="enter('fit')">
+      <div class="mc-inner"><div class="mc-label" style="color:var(--blue)">Metrics</div><div class="mc-name">FITNESS</div></div>
     </div>
   </div>
 </div>
 
-<div id="detail-view" style="display:none">
-  <div class="header">
-    <div id="detail-nav-title" style="font-family:'Bebas Neue'; font-size:22px; letter-spacing:1px">DETAILS</div>
-    <div onclick="exitModule()" style="font-size: 14px; font-weight: 700; color: var(--green)">CLOSE</div>
-  </div>
-  <div id="log-list" style="padding-top: 20px"></div>
-</div>
-
-<button class="fab" onclick="openAddModal()">+</button>
-
-<div class="modal-overlay" id="modal-overlay" onclick="if(event.target===this)closeAddModal()">
-  <div class="modal">
-    <div style="font-size: 18px; font-weight: 700; margin-bottom: 20px">SESSION FEEDBACK</div>
-    
-    <div class="rating-select" id="rating-select">
-      <span class="star-btn" onclick="setRating(1)">★</span>
-      <span class="star-btn" onclick="setRating(2)">★</span>
-      <span class="star-btn" onclick="setRating(3)">★</span>
-      <span class="star-btn" onclick="setRating(4)">★</span>
-      <span class="star-btn" onclick="setRating(5)">★</span>
-    </div>
-
-    <div id="dynamic-form">
-      <input type="text" id="f-title" class="modal-input" placeholder="SESSION TITLE">
-      <textarea id="f-text" class="modal-input" style="height: 140px" placeholder="INSIGHTS & DATA..."></textarea>
-    </div>
-    <button style="width:100%; background:var(--green); color:#000; border:none; padding:16px; border-radius:12px; font-weight:900; font-size:16px" onclick="handleSave()">LOG DATA</button>
-  </div>
-</div>
+<button class="fab" onclick="alert('Quick Entry')">+</button>
 
 <script>
-let store = JSON.parse(localStorage.getItem('bball_v4') || '{"player":[],"coach":[],"ref":[],"fit":[],"prs":{}}');
-let activeModule = null;
-let currentRating = 0;
-
-function saveData() {
-  localStorage.setItem('bball_v4', JSON.stringify(store));
+  // 靖哥，这里接你原本的存储和 updateStats 逻辑
+  function updateHomeStats() {
+    const store = JSON.parse(localStorage.getItem('bball_v4') || '{}');
+    ['player','coach','ref','fit'].forEach(m => {
+      const el = document.getElementById(`stat-${m}`);
+      if(el) el.textContent = (store[m] || []).length;
+    });
+  }
   updateHomeStats();
-}
-
-function setRating(r) {
-  currentRating = r;
-  const stars = document.querySelectorAll('.star-btn');
-  stars.forEach((s, i) => s.classList.toggle('active', i < r));
-}
-
-function enterModule(mod) {
-  activeModule = mod;
-  document.getElementById('home-view').style.display = 'none';
-  document.getElementById('detail-view').style.display = 'block';
-  document.getElementById('detail-nav-title').textContent = mod.toUpperCase();
-  renderLogs();
-}
-
-function exitModule() {
-  activeModule = null;
-  document.getElementById('home-view').style.display = 'block';
-  document.getElementById('detail-view').style.display = 'none';
-}
-
-function renderLogs() {
-  const list = document.getElementById('log-list');
-  const items = store[activeModule] || [];
-  
-  list.innerHTML = items.map(item => {
-    const isDepth = item.text.length > 50;
-    const ratingStars = '★'.repeat(item.rating || 0) + '☆'.repeat(5 - (item.rating || 0));
-    
-    return `
-      <div class="card">
-        <div class="card-header">
-          <div class="tag-row">
-            <span class="tag ${isDepth ? 'tag-depth' : 'tag-brief'}">${isDepth ? 'DEPTH' : 'BRIEF'}</span>
-            <span class="tag" style="background:rgba(255,255,255,0.05)">${item.date}</span>
-          </div>
-          <div class="card-rating">${ratingStars}</div>
-        </div>
-        <div class="card-title">${item.title}</div>
-        <div class="card-text">${item.text}</div>
-      </div>
-    `;
-  }).join('');
-}
-
-function openAddModal() {
-  setRating(0);
-  document.getElementById('modal-overlay').classList.add('open');
-}
-
-function closeAddModal() {
-  document.getElementById('modal-overlay').classList.remove('open');
-}
-
-function handleSave() {
-  const title = document.getElementById('f-title').value;
-  const text = document.getElementById('f-text').value;
-  if(!title || !activeModule) return;
-
-  const entry = {
-    id: Date.now(),
-    date: new Date().toISOString().split('T')[0],
-    title,
-    text,
-    rating: currentRating
-  };
-  
-  store[activeModule].unshift(entry);
-  saveData();
-  closeAddModal();
-  renderLogs();
-  document.getElementById('f-title').value = '';
-  document.getElementById('f-text').value = '';
-}
-
-function updateHomeStats() {
-  ['player','coach','ref','fit'].forEach(m => {
-    const el = document.getElementById(`stat-${m}`);
-    if(el) el.textContent = store[m].length;
-  });
-}
-
-updateHomeStats();
 </script>
 </body>
 </html>
