@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>LEE'S BASKETBALL LAB</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Sans+SC:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #050608;
+  --surface: #12141c;
+  --surface2: #1c202b;
+  --border: #2d323e;
+  --green: #00ff73;
+  --green-dim: rgba(0, 255, 115, 0.1);
+  --purple: #a37dff;
+  --purple-dim: rgba(163, 125, 255, 0.1);
+  --orange: #ff6b35;
+  --orange-dim: rgba(255, 107, 53, 0.1);
+  --blue: #38bdf8;
+  --text: #ffffff;
+  --text-dim: #8e96aa;
+  --radius: 4px; /* 更加硬朗的方角 */
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Noto Sans SC', sans-serif;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* 视觉张力背景 */
+body::before {
+  content: 'NO EXCUSE';
+  position: fixed;
+  top: 10%; left: -5%;
+  font-family: 'Bebas Neue';
+  font-size: 20vw;
+  color: rgba(255,255,255,0.02);
+  z-index: -1;
+  transform: rotate(-10deg);
+  white-space: nowrap;
+}
+
+/* HERO SECTION - 强化竞技感 */
+.hero {
+  padding: 40px 20px 20px;
+  background: linear-gradient(180deg, #1a1d26 0%, var(--bg) 100%);
+  border-bottom: 2px solid var(--border);
+}
+.hero-header { display: flex; align-items: center; gap: 15px; margin-bottom: 25px; }
+.hero-avatar {
+  width: 64px; height: 64px;
+  background: var(--orange);
+  color: #000;
+  font-family: 'Bebas Neue';
+  font-size: 2.5rem;
+  display: flex; align-items: center; justify-content: center;
+  clip-path: polygon(10% 0, 100% 0, 90% 100%, 0 100%); /* 倾斜造型 */
+}
+.hero-name { font-family: 'Bebas Neue'; font-size: 2.8rem; letter-spacing: 2px; line-height: 1; }
+.hero-tagline { font-size: 12px; color: var(--orange); font-weight: 700; text-transform: uppercase; }
+
+.hero-stats {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 15px 0;
+}
+.hstat { text-align: center; border-right: 1px solid var(--border); }
+.hstat:last-child { border-right: none; }
+.hstat-n { font-family: 'Bebas Neue'; font-size: 1.8rem; color: var(--text); display: block; line-height: 1; }
+.hstat-l { font-size: 10px; color: var(--text-dim); text-transform: uppercase; margin-top: 4px; }
+
+/* 模块卡片 - 增加斜切感 */
+.module-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 20px; }
+.module-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 20px;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.1s;
+}
+.module-card:active { transform: scale(0.96); }
+.module-card::after {
+  content: ''; position: absolute; top: 0; right: 0;
+  width: 30px; height: 30px;
+  background: linear-gradient(45deg, transparent 50%, var(--accent) 50%);
+}
+.mc-icon { font-size: 1.8rem; margin-bottom: 10px; }
+.mc-name { font-family: 'Bebas Neue'; font-size: 1.6rem; letter-spacing: 1px; }
+.mc-count { font-size: 10px; color: var(--text-dim); margin-top: 5px; }
+
+/* 通用导航 */
+.view-nav {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(5,6,8,0.95);
+  backdrop-filter: blur(10px);
+  padding: 12px 20px;
+  display: flex; align-items: center; gap: 10px;
+  border-bottom: 1px solid var(--border);
+}
+.vnav-btn {
+  background: transparent; border: none; color: var(--text-dim);
+  font-size: 13px; font-weight: 700; cursor: pointer; padding: 5px 10px;
+}
+.vnav-btn.active { color: var(--text); border-bottom: 2px solid var(--orange); }
+
+/* 记录卡片 */
+.card {
+  background: var(--surface);
+  border-left: 4px solid var(--accent);
+  margin: 0 20px 15px;
+  padding: 15px;
+}
+.card-meta { display: flex; justify-content: space-between; font-size: 11px; color: var(--text-dim); margin-bottom: 8px; }
+.card-title { font-weight: 900; font-size: 1.1rem; margin-bottom: 5px; color: var(--text); }
+.card-text { font-size: 14px; color: var(--text-dim); white-space: pre-wrap; }
+
+/* 健身 PR 样式 */
+.pr-badge {
+  background: gold; color: black; font-size: 10px; font-weight: 900;
+  padding: 1px 5px; border-radius: 2px; margin-left: 5px;
+}
+
+/* 执裁精进系统 - 特殊样式 */
+.ref-revamp-form { background: #1a1d26; padding: 15px; border: 1px solid var(--orange); margin-bottom: 20px; }
+.ref-input-group { margin-bottom: 15px; }
+.ref-label { font-size: 10px; color: var(--orange); font-weight: 900; display: block; margin-bottom: 5px; }
+.ref-textarea {
+  width: 100%; background: #000; border: 1px solid var(--border);
+  color: #fff; padding: 10px; font-size: 13px; outline: none;
+}
+
+/* FAB */
+.fab {
+  position: fixed; bottom: 30px; right: 20px;
+  width: 60px; height: 60px; border-radius: 50%;
+  background: var(--orange); color: #000;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 30px; box-shadow: 0 10px 30px rgba(255, 107, 53, 0.4);
+  border: none; z-index: 99;
+}
+
+/* 移动端弹出层重写 */
+.modal-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.9);
+  display: none; z-index: 200; align-items: flex-end;
+}
+.modal-overlay.open { display: flex; }
+.modal {
+  width: 100%; background: var(--surface); padding: 25px;
+  border-top: 3px solid var(--orange);
+}
+
+/* 统一按钮样式 */
+.btn-primary {
+  background: var(--orange); color: #000; border: none;
+  padding: 12px; font-weight: 900; font-family: 'Bebas Neue';
+  font-size: 1.2rem; cursor: pointer; width: 100%;
+}
+</style>
+</head>
+<body>
+
+<div id="home-view">
+  <div class="hero">
+    <div class="hero-header">
+      <div class="hero-avatar">L</div>
+      <div>
+        <div class="hero-name">LEE'S LAB</div>
+        <div class="hero-tagline">No excuses, just results.</div>
+      </div>
+    </div>
+    <div class="hero-stats">
+      <div class="hstat"><span class="hstat-n" id="stat-player">0</span><span class="hstat-l">Bball</span></div>
+      <div class="hstat"><span class="hstat-n" id="stat-coach">0</span><span class="hstat-l">Coach</span></div>
+      <div class="hstat"><span class="hstat-n" id="stat-ref">0</span><span class="hstat-l">Ref</span></div>
+      <div class="hstat"><span class="hstat-n" id="stat-fit">0</span><span class="hstat-l">Fit</span></div>
+    </div>
+  </div>
+
+  <div class="module-grid">
+    <div class="module-card" style="--accent:var(--green)" onclick="enterModule('player')">
+      <div class="mc-icon">🏀</div>
+      <div class="mc-name" style="color:var(--green)">PLAYER</div>
+      <div class="mc-count" id="count-player">0 ENTRIES</div>
+    </div>
+    <div class="module-card" style="--accent:var(--purple)" onclick="enterModule('coach')">
+      <div class="mc-icon">📋</div>
+      <div class="mc-name" style="color:var(--purple)">COACH</div>
+      <div class="mc-count" id="count-coach">0 ENTRIES</div>
+    </div>
+    <div class="module-card" style="--accent:var(--orange)" onclick="enterModule('ref')">
+      <div class="mc-icon">⚖️</div>
+      <div class="mc-name" style="color:var(--orange)">REFEREE</div>
+      <div class="mc-count" id="count-ref">0 ENTRIES</div>
+    </div>
+    <div class="module-card" style="--accent:var(--blue)" onclick="enterFitness()">
+      <div class="mc-icon">💪</div>
+      <div class="mc-name" style="color:var(--blue)">FITNESS</div>
+      <div class="mc-count" id="count-fit">0 SESSIONS</div>
+    </div>
+  </div>
+</div>
+
+<div id="module-view" style="display:none">
+  <div class="view-nav">
+    <button class="vnav-btn" onclick="exitModule()">← BACK</button>
+    <div id="module-title" style="font-family:'Bebas Neue'; font-size:1.5rem; flex:1"></div>
+    <button class="vnav-btn active" id="tab-log" onclick="switchModuleTab('log')">LOG</button>
+    <button class="vnav-btn" id="tab-extra" onclick="switchModuleTab('extra')">SYSTEM</button>
+  </div>
+  
+  <div id="log-container" style="padding-top:20px"></div>
+  
+  <div id="ref-system-container" style="display:none; padding:20px">
+    <div class="ref-revamp-form">
+      <div class="ref-label">赛后深度复盘</div>
+      <div class="ref-input-group">
+        <label class="ref-label">1. 关键宣判情境</label>
+        <input type="text" id="ref-title" class="ref-textarea" style="height:40px" placeholder="例如：第四节关键球走步漏判">
+      </div>
+      <div class="ref-input-group">
+        <label class="ref-label">2. 判罚理由 vs 规则依据</label>
+        <textarea id="ref-reason" class="ref-textarea" placeholder="当时怎么想的？规则第几条是怎么说的？"></textarea>
+      </div>
+      <div class="ref-input-group">
+        <label class="ref-label">3. 选位/视角修正</label>
+        <textarea id="ref-fix" class="ref-textarea" placeholder="如果重来，追踪位或中央位应该怎么移动？"></textarea>
+      </div>
+      <button class="btn-primary" onclick="submitRefRefinedLog()">保存深度复盘</button>
+    </div>
+    <div id="ref-cards-mini"></div>
+  </div>
+</div>
+
+<div id="fitness-view" style="display:none">
+  <div class="view-nav">
+    <button class="vnav-btn" onclick="exitModule()">← BACK</button>
+    <div style="font-family:'Bebas Neue'; font-size:1.5rem; flex:1">FITNESS LAB</div>
+    <button class="vnav-btn active" onclick="switchFitTab('log')">SESSIONS</button>
+    <button class="vnav-btn" onclick="switchFitTab('stats')">PRs</button>
+  </div>
+  <div id="fitness-container" style="padding:20px"></div>
+</div>
+
+<button class="fab" onclick="openAddModal()">+</button>
+
+<div class="modal-overlay" id="modal-overlay" onclick="if(event.target===this)closeAddModal()">
+  <div class="modal">
+    <div style="font-family:'Bebas Neue'; font-size:1.8rem; margin-bottom:20px" id="modal-title">NEW ENTRY</div>
+    <input type="date" id="f-date" style="width:100%; background:#000; color:#fff; border:1px solid var(--border); padding:10px; margin-bottom:15px">
+    <input type="text" id="f-title" placeholder="TITLE" style="width:100%; background:#000; color:#fff; border:1px solid var(--border); padding:10px; margin-bottom:15px">
+    <textarea id="f-text" placeholder="WRITE YOUR STUFF..." style="width:100%; background:#000; color:#fff; border:1px solid var(--border); padding:10px; height:120px; margin-bottom:20px"></textarea>
+    <button class="btn-primary" onclick="handleSave()">SAVE DATA</button>
+  </div>
+</div>
+
+<script>
+// --- 数据引擎 ---
+let store = JSON.parse(localStorage.getItem('bball_v2') || '{"player":[],"coach":[],"ref":[],"fitness":[],"prs":{}}');
+
+function saveData() {
+  localStorage.setItem('bball_v2', JSON.stringify(store));
+  updateUI();
+}
+
+// --- 模块控制 ---
+let activeModule = null;
+
+function enterModule(mod) {
+  activeModule = mod;
+  document.getElementById('home-view').style.display = 'none';
+  document.getElementById('module-view').style.display = 'block';
+  document.getElementById('module-title').textContent = mod.toUpperCase();
+  
+  // 只有裁判模块显示 SYSTEM Tab
+  document.getElementById('tab-extra').style.display = (mod === 'ref') ? 'block' : 'none';
+  
+  switchModuleTab('log');
+}
+
+function exitModule() {
+  activeModule = null;
+  document.getElementById('home-view').style.display = 'block';
+  document.getElementById('module-view').style.display = 'none';
+  document.getElementById('fitness-view').style.display = 'none';
+}
+
+function switchModuleTab(tab) {
+  const isLog = tab === 'log';
+  document.getElementById('log-container').style.display = isLog ? 'block' : 'none';
+  document.getElementById('ref-system-container').style.display = isLog ? 'none' : 'block';
+  document.getElementById('tab-log').className = isLog ? 'vnav-btn active' : 'vnav-btn';
+  document.getElementById('tab-extra').className = isLog ? 'vnav-btn' : 'vnav-btn active';
+  
+  if(isLog) renderLogs();
+}
+
+// --- 记录渲染 ---
+function renderLogs() {
+  const container = document.getElementById('log-container');
+  const logs = store[activeModule] || [];
+  const colorMap = { player: 'var(--green)', coach: 'var(--purple)', ref: 'var(--orange)' };
+  
+  container.innerHTML = logs.length ? logs.map(l => `
+    <div class="card" style="--accent:${colorMap[activeModule]}">
+      <div class="card-meta">
+        <span>${l.date}</span>
+        <span onclick="deleteEntry('${activeModule}', ${l.id})">DELETE</span>
+      </div>
+      <div class="card-title">${l.title}</div>
+      <div class="card-text">${l.text}</div>
+    </div>
+  `).join('') : '<div style="text-align:center; color:var(--text-dim); margin-top:50px">EMPTY LAB</div>';
+}
+
+// --- 执裁复盘专用保存 ---
+function submitRefRefinedLog() {
+  const title = document.getElementById('ref-title').value;
+  const reason = document.getElementById('ref-reason').value;
+  const fix = document.getElementById('ref-fix').value;
+  
+  if(!title || !reason) return alert('判罚理由是精进的核心！');
+  
+  const entry = {
+    id: Date.now(),
+    date: new Date().toISOString().split('T')[0],
+    title: `[复盘] ${title}`,
+    text: `【规则依据】\n${reason}\n\n【动作/视角修正】\n${fix}`
+  };
+  
+  store.ref.unshift(entry);
+  saveData();
+  
+  // 清空并跳转
+  document.getElementById('ref-title').value = '';
+  document.getElementById('ref-reason').value = '';
+  document.getElementById('ref-fix').value = '';
+  switchModuleTab('log');
+}
+
+// --- 健身引擎 2.0 (带 PR 检测) ---
+function enterFitness() {
+  activeModule = 'fitness';
+  document.getElementById('home-view').style.display = 'none';
+  document.getElementById('fitness-view').style.display = 'block';
+  renderFitness();
+}
+
+function renderFitness() {
+  const container = document.getElementById('fitness-container');
+  const sessions = store.fitness || [];
+  
+  container.innerHTML = `
+    <div class="ref-revamp-form">
+      <div class="ref-label">快速练后记录</div>
+      <input type="text" id="fit-ex" class="ref-textarea" style="height:40px; margin-bottom:10px" placeholder="动作: 如 卧推">
+      <div style="display:flex; gap:10px">
+        <input type="number" id="fit-weight" class="ref-textarea" placeholder="重量 kg">
+        <input type="number" id="fit-reps" class="ref-textarea" placeholder="次数">
+      </div>
+      <button class="btn-primary" style="margin-top:10px" onclick="saveFitSession()">RECORD SESSION</button>
+    </div>
+    ${sessions.map(s => `
+      <div class="card" style="--accent:var(--blue)">
+        <div class="card-meta"><span>${s.date}</span></div>
+        <div class="card-title">${s.ex} ${s.weight}kg x ${s.reps} ${s.isPR ? '<span class="pr-badge">NEW PR</span>' : ''}</div>
+      </div>
+    `).join('')}
+  `;
+}
+
+function saveFitSession() {
+  const ex = document.getElementById('fit-ex').value;
+  const weight = parseFloat(document.getElementById('fit-weight').value);
+  const reps = parseInt(document.getElementById('fit-reps').value);
+  
+  if(!ex || !weight) return;
+  
+  // PR 逻辑
+  let isPR = false;
+  if(!store.prs[ex] || weight > store.prs[ex]) {
+    store.prs[ex] = weight;
+    isPR = true;
+  }
+  
+  store.fitness.unshift({
+    id: Date.now(),
+    date: new Date().toISOString().split('T')[0],
+    ex, weight, reps, isPR
+  });
+  
+  saveData();
+  renderFitness();
+}
+
+// --- 通用功能 ---
+function openAddModal() {
+  if(activeModule === 'fitness') return; // 健身有独立表单
+  document.getElementById('f-date').value = new Date().toISOString().split('T')[0];
+  document.getElementById('modal-overlay').classList.add('open');
+}
+
+function closeAddModal() {
+  document.getElementById('modal-overlay').classList.remove('open');
+}
+
+function handleSave() {
+  const title = document.getElementById('f-title').value;
+  const text = document.getElementById('f-text').value;
+  const date = document.getElementById('f-date').value;
+  
+  if(!title || !activeModule) return;
+  
+  store[activeModule].unshift({ id: Date.now(), date, title, text });
+  saveData();
+  closeAddModal();
+  renderLogs();
+}
+
+function deleteEntry(mod, id) {
+  if(!confirm('DESTROY THIS DATA?')) return;
+  store[mod] = store[mod].filter(e => e.id !== id);
+  saveData();
+  activeModule === 'fitness' ? renderFitness() : renderLogs();
+}
+
+function updateUI() {
+  // 更新首页统计
+  const types = ['player', 'coach', 'ref', 'fit'];
+  types.forEach(t => {
+    const count = t === 'fit' ? store.fitness.length : store[t].length;
+    document.getElementById(`stat-${t}`).textContent = count;
+    document.getElementById(`count-${t}`).textContent = `${count} ENTRIES`;
+  });
+}
+
+// 初始化
+updateUI();
+</script>
+</body>
+</html>
